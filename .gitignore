@@ -1,0 +1,56 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build output directories
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Build artifacts
+*.exe
+*.dll
+*.lib
+*.ilk
+*.pdb
+*.exp
+*.ipdb
+*.pgd
+*.pgr
+*.rsp
+*.obj
+*.iobj
+*.idb
+*.res
+*.metagen
+*.recipe
+*.tlog
+*.log
+FileListAbsolute.txt
+
+# IntelliSense / Browse Info
+*.ncb
+*.VC.db
+*.VC.VC.opendb
+ipch/
+
+# C++/CLI generated
+*.resources
+
+# NuGet
+packages/
+*.nupkg
+
+# Windows
+Thumbs.db
+Desktop.ini
