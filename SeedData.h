@@ -29,7 +29,7 @@ public:
         // Sports
         manager->addEvent(gcnew EventClass(
             L"Campus 5K Fun Run",
-            L"campus Recreation Department",
+            L"Campus Recreation Department",
             L"Main Quad, North Entrance",
             L"Open to all skill levels. The 5K route goes through campus and "
             L"the adjacent park trail. Awards for top finishers in each age group. "

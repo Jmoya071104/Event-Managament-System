@@ -127,12 +127,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppState.h" />
+    <ClInclude Include="AttendeeManagementPage.h" />
     <ClInclude Include="EventClass.h" />
     <ClInclude Include="EventDetailsPage.h" />
+    <ClInclude Include="EventEditorPage.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="EventsPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="OrganizerDashboardPage.h" />
     <ClInclude Include="StartingPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>

@@ -61,31 +61,6 @@ public:
         Icon            = icon;
     }
 
-    // Legacy constructor used by the existing Create Event panel (no category/capacity)
-    // Category defaults to "Other", Capacity to 0 (unlimited)
-    EventClass(
-        String^  name,
-        String^  runner,
-        String^  location,
-        String^  description,
-        DateTime start,
-        DateTime end,
-        Image^   icon)
-    {
-        Id              = _nextId++;
-        Name            = name;
-        Runner          = runner;
-        Location        = location;
-        Description     = description;
-        Category        = EventCategories::Other;
-        StartDateTime   = start;
-        EndDateTime     = end;
-        Capacity        = 0;
-        RegisteredCount = 0;
-        ImagePath       = L"";
-        Icon            = icon;
-    }
-
     // Used by PersistenceService to restore an event with a known Id and RegisteredCount
     static EventClass^ Restore(
         int      id,
