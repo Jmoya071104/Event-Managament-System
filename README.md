@@ -1,6 +1,6 @@
 # Event Management System
 
-A Windows Forms application built with C++/CLI (.NET) for managing events.
+A Windows Forms application built with C++/CLI (.NET) for managing events, featuring a modern, visually consistent UI with dark navy top bars, light gray backgrounds, white content cards, and a cohesive blue-indigo accent color scheme.
 
 ## Features
 
@@ -32,6 +32,25 @@ A Windows Forms application built with C++/CLI (.NET) for managing events.
 1. Open `GroupProject.sln` in Visual Studio 2022
 2. Select the **Debug** or **Release** configuration and **x64** platform
 3. Press **F5** to build and run
+
+## UI Design
+
+All pages share a unified visual system:
+
+| Token | Color | Usage |
+|---|---|---|
+| `APP_BG` | `rgb(245, 246, 250)` | Form / page background |
+| `TOPBAR` | `rgb(24, 28, 58)` | Dark navy top bar on every page |
+| `ACCENT` | `rgb(67, 97, 238)` | Primary buttons, category stripes, stats |
+| `DANGER` | `rgb(220, 53, 69)` | Destructive actions (cancel, delete) |
+| `SUCCESS` | `rgb(25, 135, 84)` | Create / save-changes buttons |
+| `GOLD` | `rgb(255, 193, 7)` | Saved / bookmarked state |
+| `TEXT1` | `rgb(30, 30, 50)` | Primary text |
+| `TEXT2` | `rgb(110, 110, 140)` | Secondary / meta text |
+
+- **Font:** Segoe UI throughout (replacing all Microsoft Sans Serif)
+- **Buttons:** `FlatStyle::Flat`, `BorderSize = 0` for primary actions; `BorderSize = 1` with a subtle border color for secondary actions
+- **Cards:** White background, `BorderStyle::FixedSingle`, left 5 px colored category stripe
 
 ## Project Structure
 
