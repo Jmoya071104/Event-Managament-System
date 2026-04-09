@@ -22,10 +22,7 @@ namespace GroupProject {
 		~StartingPage() { if (components) { delete components; } }
 	private:
 		System::ComponentModel::Container ^components;
-		Label^  TitleLabel     = gcnew Label();
-		Button^ OrganizerBtn  = gcnew Button();
-		Button^ ViewEventsBtn  = gcnew Button();
-		Button^ MyEventsBtn    = gcnew Button();
+		Panel^ _navCard = nullptr;
 
 #pragma region Windows Form Designer generated code
 		void InitializeComponent(void)
@@ -36,10 +33,28 @@ namespace GroupProject {
 			this->ClientSize = System::Drawing::Size(282, 253);
 			this->Name = L"StartingPage";
 			this->Text = L"StartingPage";
-			this->Load += gcnew System::EventHandler(this, &StartingPage::StartingPage_Load);
+			this->Load   += gcnew System::EventHandler(this, &StartingPage::StartingPage_Load);
+			this->Resize += gcnew System::EventHandler(this, &StartingPage::StartingPage_Resize);
 			this->ResumeLayout(false);
 		}
 #pragma endregion
+
+	private:
+		void CenterNavCard()
+		{
+			if (_navCard == nullptr) return;
+			int W  = this->ClientSize.Width;
+			int H  = this->ClientSize.Height;
+			int cx = (W - _navCard->Width)  / 2;
+			int cy = (H - _navCard->Height) / 2 + 20;
+			if (cy < 100) cy = 100;
+			_navCard->Location = System::Drawing::Point(cx, cy);
+		}
+
+		System::Void StartingPage_Resize(System::Object^, System::EventArgs^)
+		{
+			CenterNavCard();
+		}
 
 	private: System::Void StartingPage_Load(System::Object^ sender, System::EventArgs^ e)
 	{
@@ -47,33 +62,93 @@ namespace GroupProject {
 		bool hadSavedData = PersistenceService::Load(AppState::Manager, AppState::Session);
 		if (!hadSavedData) SeedData::Seed(AppState::Manager);
 		this->WindowState = FormWindowState::Maximized;
-		float W = (float)this->ClientSize.Width;
-		float H = (float)this->ClientSize.Height;
-		this->TitleLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 25, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-		this->TitleLabel->Location  = System::Drawing::Point((int)(W*0.25), 0);
-		this->TitleLabel->Size      = System::Drawing::Size((int)(W*0.5), (int)(H*0.20));
-		this->TitleLabel->Text      = L"Event Management System";
-		this->TitleLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-		this->TitleLabel->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-		this->Controls->Add(TitleLabel);
-		this->ViewEventsBtn->Location = System::Drawing::Point((int)(W*0.25),(int)(H*.28));
-		this->ViewEventsBtn->Size     = System::Drawing::Size((int)(W*0.50),(int)(H*0.13));
-		this->ViewEventsBtn->Text     = L"Browse Events";
-		this->ViewEventsBtn->UseVisualStyleBackColor = true;
-		this->ViewEventsBtn->Click   += gcnew System::EventHandler(this, &StartingPage::ViewEvents_Click);
-		this->Controls->Add(ViewEventsBtn);
-		this->MyEventsBtn->Location = System::Drawing::Point((int)(W*0.25),(int)(H*.45));
-		this->MyEventsBtn->Size     = System::Drawing::Size((int)(W*0.50),(int)(H*0.13));
-		this->MyEventsBtn->Text     = L"My Events";
-		this->MyEventsBtn->UseVisualStyleBackColor = true;
-		this->MyEventsBtn->Click   += gcnew System::EventHandler(this, &StartingPage::MyEvents_Click);
-		this->Controls->Add(MyEventsBtn);
-		this->OrganizerBtn->Location = System::Drawing::Point((int)(W*0.25),(int)(H*.62));
-		this->OrganizerBtn->Size     = System::Drawing::Size((int)(W*0.50),(int)(H*0.13));
-		this->OrganizerBtn->Text     = L"Organizer Dashboard";
-		this->OrganizerBtn->UseVisualStyleBackColor = true;
-		this->OrganizerBtn->Click   += gcnew System::EventHandler(this, &StartingPage::OrganizerDashboard_Click);
-		this->Controls->Add(OrganizerBtn);
+		this->BackColor   = Color::FromArgb(245, 246, 250);
+
+		// ── Top bar ─────────────────────────────────────────────────────────
+		Panel^ topBar     = gcnew Panel();
+		topBar->Dock      = DockStyle::Top;
+		topBar->Height    = 86;
+		topBar->BackColor = Color::FromArgb(24, 28, 58);
+		this->Controls->Add(topBar);
+
+		Label^ appTitle    = gcnew Label();
+		appTitle->Text      = L"Event Management System";
+		appTitle->Font      = gcnew Drawing::Font(L"Segoe UI", 22, FontStyle::Bold);
+		appTitle->ForeColor = Color::White;
+		appTitle->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+		appTitle->Dock      = DockStyle::Top;
+		appTitle->Height    = 56;
+		topBar->Controls->Add(appTitle);
+
+		Label^ subTitle    = gcnew Label();
+		subTitle->Text      = L"Browse events, register, and manage your schedule";
+		subTitle->Font      = gcnew Drawing::Font(L"Segoe UI", 10);
+		subTitle->ForeColor = Color::FromArgb(170, 178, 220);
+		subTitle->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+		subTitle->Dock      = DockStyle::Bottom;
+		subTitle->Height    = 28;
+		topBar->Controls->Add(subTitle);
+
+		// ── Navigation card (centered on form) ──────────────────────────────
+		const int cardW  = 420;
+		const int btnW   = 362;
+		const int btnH   = 54;
+		const int btnX   = (cardW - btnW) / 2;
+		const int firstY = 76;
+		const int cardH  = firstY + (btnH + 16) * 3 + 20;
+
+		_navCard              = gcnew Panel();
+		_navCard->Size        = System::Drawing::Size(cardW, cardH);
+		_navCard->BackColor   = Color::White;
+		_navCard->BorderStyle = BorderStyle::FixedSingle;
+		this->Controls->Add(_navCard);
+
+		Label^ navHdr    = gcnew Label();
+		navHdr->Text      = L"What would you like to do?";
+		navHdr->Font      = gcnew Drawing::Font(L"Segoe UI", 12, FontStyle::Bold);
+		navHdr->ForeColor = Color::FromArgb(30, 30, 50);
+		navHdr->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+		navHdr->Size      = System::Drawing::Size(cardW, 44);
+		navHdr->Location  = System::Drawing::Point(0, 20);
+		_navCard->Controls->Add(navHdr);
+
+		Button^ viewEventsBtn    = gcnew Button();
+		viewEventsBtn->Text      = L"Browse Events";
+		viewEventsBtn->Font      = gcnew Drawing::Font(L"Segoe UI", 11, FontStyle::Bold);
+		viewEventsBtn->Size      = System::Drawing::Size(btnW, btnH);
+		viewEventsBtn->Location  = System::Drawing::Point(btnX, firstY);
+		viewEventsBtn->BackColor = Color::FromArgb(67, 97, 238);
+		viewEventsBtn->ForeColor = Color::White;
+		viewEventsBtn->FlatStyle = FlatStyle::Flat;
+		viewEventsBtn->FlatAppearance->BorderSize = 0;
+		viewEventsBtn->Click    += gcnew System::EventHandler(this, &StartingPage::ViewEvents_Click);
+		_navCard->Controls->Add(viewEventsBtn);
+
+		Button^ myEventsBtn    = gcnew Button();
+		myEventsBtn->Text      = L"My Events";
+		myEventsBtn->Font      = gcnew Drawing::Font(L"Segoe UI", 11, FontStyle::Bold);
+		myEventsBtn->Size      = System::Drawing::Size(btnW, btnH);
+		myEventsBtn->Location  = System::Drawing::Point(btnX, firstY + (btnH + 16));
+		myEventsBtn->BackColor = Color::FromArgb(67, 97, 238);
+		myEventsBtn->ForeColor = Color::White;
+		myEventsBtn->FlatStyle = FlatStyle::Flat;
+		myEventsBtn->FlatAppearance->BorderSize = 0;
+		myEventsBtn->Click    += gcnew System::EventHandler(this, &StartingPage::MyEvents_Click);
+		_navCard->Controls->Add(myEventsBtn);
+
+		Button^ orgBtn    = gcnew Button();
+		orgBtn->Text      = L"Organizer Dashboard";
+		orgBtn->Font      = gcnew Drawing::Font(L"Segoe UI", 11, FontStyle::Bold);
+		orgBtn->Size      = System::Drawing::Size(btnW, btnH);
+		orgBtn->Location  = System::Drawing::Point(btnX, firstY + (btnH + 16) * 2);
+		orgBtn->BackColor = Color::FromArgb(50, 55, 100);
+		orgBtn->ForeColor = Color::White;
+		orgBtn->FlatStyle = FlatStyle::Flat;
+		orgBtn->FlatAppearance->BorderSize = 0;
+		orgBtn->Click    += gcnew System::EventHandler(this, &StartingPage::OrganizerDashboard_Click);
+		_navCard->Controls->Add(orgBtn);
+
+		CenterNavCard();
 	}
 
 	private: System::Void ViewEvents_Click(System::Object^ sender, System::EventArgs^ e)

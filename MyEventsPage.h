@@ -75,39 +75,52 @@ private:
         int W = this->ClientSize.Width;
         int H = this->ClientSize.Height;
 
-        // Title
+        this->BackColor = Color::FromArgb(245, 246, 250);
+
+        // Title bar
+        Panel^ topBar     = gcnew Panel();
+        topBar->Location  = Point(0, 0);
+        topBar->Size      = System::Drawing::Size(W, 62);
+        topBar->BackColor = Color::FromArgb(24, 28, 58);
+        this->Controls->Add(topBar);
+
+        Button^ backBtn   = gcnew Button();
+        backBtn->Text      = L"← Back";
+        backBtn->Font      = gcnew System::Drawing::Font(L"Segoe UI", 9);
+        backBtn->ForeColor = Color::White;
+        backBtn->FlatStyle = FlatStyle::Flat;
+        backBtn->FlatAppearance->BorderColor = Color::FromArgb(80, 85, 130);
+        backBtn->Location  = Point(10, 14);
+        backBtn->Size      = System::Drawing::Size(80, 34);
+        backBtn->Click    += gcnew System::EventHandler(this, &MyEventsPage::BackBtn_Click);
+        topBar->Controls->Add(backBtn);
+
         Label^ title = gcnew Label();
         title->Text      = L"My Events";
-        title->Font      = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20, FontStyle::Bold);
-        title->Location  = Point(0, 0);
-        title->Size      = System::Drawing::Size(W, 55);
-        title->TextAlign = ContentAlignment::MiddleCenter;
-        this->Controls->Add(title);
-
-        // Back button
-        Button^ backBtn = gcnew Button();
-        backBtn->Text     = L"< Back";
-        backBtn->Location = Point(10, 10);
-        backBtn->Size     = System::Drawing::Size(90, 35);
-        backBtn->Click   += gcnew System::EventHandler(this, &MyEventsPage::BackBtn_Click);
-        this->Controls->Add(backBtn);
-        backBtn->BringToFront();
+        title->Font      = gcnew System::Drawing::Font(L"Segoe UI", 16, FontStyle::Bold);
+        title->ForeColor = Color::White;
+        title->Location  = Point(100, 0);
+        title->Size      = System::Drawing::Size(W - 120, 62);
+        title->TextAlign = ContentAlignment::MiddleLeft;
+        topBar->Controls->Add(title);
 
         // TabControl
         _tabs = gcnew TabControl();
-        _tabs->Location = Point(10, 65);
-        _tabs->Size     = System::Drawing::Size(W - 20, H - 75);
-        _tabs->Font     = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11);
+        _tabs->Location = Point(10, 72);
+        _tabs->Size     = System::Drawing::Size(W - 20, H - 82);
+        _tabs->Font     = gcnew System::Drawing::Font(L"Segoe UI", 10);
         this->Controls->Add(_tabs);
 
         // Registered tab
         TabPage^ regPage = gcnew TabPage(L"Registered Events");
+        regPage->BackColor = Color::FromArgb(245, 246, 250);
         _registeredPanel = MakeScrollPanel();
         regPage->Controls->Add(_registeredPanel);
         _tabs->TabPages->Add(regPage);
 
         // Saved tab
         TabPage^ savPage = gcnew TabPage(L"Saved Events");
+        savPage->BackColor = Color::FromArgb(245, 246, 250);
         _savedPanel = MakeScrollPanel();
         savPage->Controls->Add(_savedPanel);
         _tabs->TabPages->Add(savPage);
@@ -149,9 +162,9 @@ private:
     {
         Label^ lbl = gcnew Label();
         lbl->Text      = text;
-        lbl->Font      = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12);
-        lbl->ForeColor = Color::Gray;
-        lbl->Size      = System::Drawing::Size(600, 60);
+        lbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 12);
+        lbl->ForeColor = Color::FromArgb(150, 152, 180);
+        lbl->Size      = System::Drawing::Size(700, 70);
         lbl->TextAlign = ContentAlignment::MiddleCenter;
         lbl->Margin    = System::Windows::Forms::Padding(20);
         return lbl;
@@ -162,75 +175,98 @@ private:
     Panel^ MakeEventCard(EventClass^ ev, bool isRegisteredTab)
     {
         Panel^ card = gcnew Panel();
-        card->Size        = System::Drawing::Size(this->ClientSize.Width - 60, 110);
+        card->Size        = System::Drawing::Size(this->ClientSize.Width - 60, 116);
         card->BorderStyle = BorderStyle::FixedSingle;
         card->BackColor   = Color::White;
         card->Margin      = System::Windows::Forms::Padding(0, 0, 0, 8);
-        card->Tag         = ev->Id.ToString(); // store for action lookup
+        card->Tag         = ev->Id.ToString();
+
+        // Left colored stripe
+        Panel^ stripe    = gcnew Panel();
+        stripe->Size     = System::Drawing::Size(5, 116);
+        stripe->Location = Point(0, 0);
+        stripe->BackColor = EventDetailsPage::CategoryColor(ev->Category);
+        card->Controls->Add(stripe);
 
         // Thumbnail
         PictureBox^ thumb = gcnew PictureBox();
         thumb->Size      = System::Drawing::Size(90, 90);
-        thumb->Location  = Point(8, 10);
+        thumb->Location  = Point(16, 13);
         thumb->SizeMode  = PictureBoxSizeMode::StretchImage;
         thumb->Image     = ev->Icon;
-        thumb->BackColor = Color::LightGray;
+        thumb->BackColor = Color::FromArgb(228, 230, 240);
         card->Controls->Add(thumb);
 
-        int tx = 110;
+        const int tx  = 118;
+        const int btnRight = card->Width - 10;
+        const int textW  = btnRight - tx - 230;
 
         // Title
         Label^ titleLbl = gcnew Label();
         titleLbl->Text      = ev->Name;
-        titleLbl->Font      = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, FontStyle::Bold);
-        titleLbl->Location  = Point(tx, 8);
-        titleLbl->Size      = System::Drawing::Size(card->Width - tx - 230, 24);
+        titleLbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 11, FontStyle::Bold);
+        titleLbl->ForeColor = Color::FromArgb(30, 30, 50);
+        titleLbl->Location  = Point(tx, 10);
+        titleLbl->Size      = System::Drawing::Size(textW, 24);
         titleLbl->AutoEllipsis = true;
         card->Controls->Add(titleLbl);
 
         // Organizer / location / date
-        String^ meta = ev->Runner + L"  |  " + ev->Location + L"\n"
+        String^ meta = ev->Runner + L"  •  " + ev->Location + L"\n"
                      + ev->StartDateTime.ToString(L"MMM dd, yyyy  hh:mm tt");
         Label^ metaLbl = gcnew Label();
         metaLbl->Text     = meta;
-        metaLbl->Font     = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9);
-        metaLbl->Location = Point(tx, 34);
-        metaLbl->Size     = System::Drawing::Size(card->Width - tx - 230, 44);
+        metaLbl->Font     = gcnew System::Drawing::Font(L"Segoe UI", 9);
+        metaLbl->ForeColor = Color::FromArgb(110, 110, 140);
+        metaLbl->Location = Point(tx, 36);
+        metaLbl->Size     = System::Drawing::Size(textW, 44);
         card->Controls->Add(metaLbl);
 
         // Category badge
         Label^ catBadge = gcnew Label();
         catBadge->Text      = ev->Category;
-        catBadge->Location  = Point(tx, 82);
-        catBadge->Size      = System::Drawing::Size(90, 20);
+        catBadge->Location  = Point(tx, 86);
+        catBadge->Size      = System::Drawing::Size(90, 22);
         catBadge->TextAlign = ContentAlignment::MiddleCenter;
         catBadge->BackColor = EventDetailsPage::CategoryColor(ev->Category);
         catBadge->ForeColor = Color::White;
-        catBadge->Font      = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8, FontStyle::Bold);
+        catBadge->Font      = gcnew System::Drawing::Font(L"Segoe UI", 8, FontStyle::Bold);
         card->Controls->Add(catBadge);
 
         // View Details button
         Button^ detailsBtn = gcnew Button();
         detailsBtn->Text     = L"View Details";
-        detailsBtn->Location = Point(card->Width - 220, 10);
-        detailsBtn->Size     = System::Drawing::Size(100, 35);
+        detailsBtn->Font     = gcnew System::Drawing::Font(L"Segoe UI", 9, FontStyle::Bold);
+        detailsBtn->Location = Point(btnRight - 228, 14);
+        detailsBtn->Size     = System::Drawing::Size(110, 36);
+        detailsBtn->BackColor = Color::FromArgb(67, 97, 238);
+        detailsBtn->ForeColor = Color::White;
+        detailsBtn->FlatStyle = FlatStyle::Flat;
+        detailsBtn->FlatAppearance->BorderSize = 0;
         detailsBtn->Tag      = ev->Id.ToString();
         detailsBtn->Click   += gcnew System::EventHandler(this, &MyEventsPage::ViewDetails_Click);
         card->Controls->Add(detailsBtn);
 
         // Action button (Cancel Registration or Unsave)
         Button^ actionBtn = gcnew Button();
-        actionBtn->Location = Point(card->Width - 220, 55);
-        actionBtn->Size     = System::Drawing::Size(100, 35);
+        actionBtn->Location = Point(btnRight - 110, 14);
+        actionBtn->Size     = System::Drawing::Size(100, 36);
+        actionBtn->Font     = gcnew System::Drawing::Font(L"Segoe UI", 9, FontStyle::Bold);
+        actionBtn->FlatStyle = FlatStyle::Flat;
+        actionBtn->FlatAppearance->BorderSize = 0;
         actionBtn->Tag      = ev->Id.ToString();
         if (isRegisteredTab)
         {
-            actionBtn->Text     = L"Cancel Reg.";
+            actionBtn->Text     = L"Cancel";
+            actionBtn->BackColor = Color::FromArgb(220, 53, 69);
+            actionBtn->ForeColor = Color::White;
             actionBtn->Click   += gcnew System::EventHandler(this, &MyEventsPage::CancelReg_Click);
         }
         else
         {
             actionBtn->Text     = L"Unsave";
+            actionBtn->BackColor = Color::FromArgb(100, 105, 160);
+            actionBtn->ForeColor = Color::White;
             actionBtn->Click   += gcnew System::EventHandler(this, &MyEventsPage::Unsave_Click);
         }
         card->Controls->Add(actionBtn);

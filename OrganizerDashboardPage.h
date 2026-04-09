@@ -77,35 +77,39 @@ private:
         // ── Top bar ────────────────────────────────────────────────────────
         Panel^ topBar = gcnew Panel();
         topBar->Dock      = DockStyle::Top;
-        topBar->Height    = 60;
-        topBar->BackColor = Color::FromArgb(30, 30, 60);
+        topBar->Height    = 62;
+        topBar->BackColor = Color::FromArgb(24, 28, 58);
+        this->BackColor   = Color::FromArgb(245, 246, 250);
         this->Controls->Add(topBar);
 
         Button^ backBtn   = gcnew Button();
-        backBtn->Text      = L"< Back";
-        backBtn->Location  = Point(10, 13);
-        backBtn->Size      = System::Drawing::Size(90, 34);
+        backBtn->Text      = L"\u2190 Back";
+        backBtn->Location  = Point(10, 14);
+        backBtn->Size      = System::Drawing::Size(80, 34);
         backBtn->ForeColor = Color::White;
         backBtn->FlatStyle = FlatStyle::Flat;
+        backBtn->FlatAppearance->BorderColor = Color::FromArgb(80, 85, 130);
         backBtn->Click    += gcnew System::EventHandler(this, &OrganizerDashboardPage::BackBtn_Click);
         topBar->Controls->Add(backBtn);
 
         Label^ titleLbl   = gcnew Label();
         titleLbl->Text      = L"Organizer Dashboard";
-        titleLbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 16, FontStyle::Bold);
+        titleLbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 15, FontStyle::Bold);
         titleLbl->ForeColor = Color::White;
-        titleLbl->TextAlign = ContentAlignment::MiddleCenter;
-        titleLbl->Location  = Point(110, 8);
-        titleLbl->AutoSize  = true;
+        titleLbl->TextAlign = ContentAlignment::MiddleLeft;
+        titleLbl->Location  = Point(100, 0);
+        titleLbl->Size      = System::Drawing::Size(W - 320, 62);
+        titleLbl->AutoSize  = false;
         topBar->Controls->Add(titleLbl);
 
         Button^ newEventBtn   = gcnew Button();
         newEventBtn->Text      = L"+ Create New Event";
-        newEventBtn->Size      = System::Drawing::Size(170, 34);
-        newEventBtn->Location  = Point(W - 190, 13);
-        newEventBtn->BackColor = Color::FromArgb(0, 153, 76);
+        newEventBtn->Size      = System::Drawing::Size(168, 34);
+        newEventBtn->Location  = Point(W - 186, 14);
+        newEventBtn->BackColor = Color::FromArgb(25, 135, 84);
         newEventBtn->ForeColor = Color::White;
         newEventBtn->FlatStyle = FlatStyle::Flat;
+        newEventBtn->FlatAppearance->BorderSize = 0;
         newEventBtn->Anchor    = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Right);
         newEventBtn->Click    += gcnew System::EventHandler(this, &OrganizerDashboardPage::CreateEvent_Click);
         topBar->Controls->Add(newEventBtn);
@@ -113,20 +117,20 @@ private:
         // ── Stats bar ──────────────────────────────────────────────────────
         Panel^ statsBar = gcnew Panel();
         statsBar->Dock      = DockStyle::Top;
-        statsBar->Height    = 70;
-        statsBar->BackColor = Color::FromArgb(245, 245, 250);
-        statsBar->Padding   = System::Windows::Forms::Padding(20, 10, 20, 10);
+        statsBar->Height    = 84;
+        statsBar->BackColor = Color::FromArgb(248, 249, 252);
+        statsBar->Padding   = System::Windows::Forms::Padding(10, 10, 10, 10);
         this->Controls->Add(statsBar);
 
-        _statsTotalEvents    = MakeStatLabel(statsBar, L"Total Events: 0",    20);
-        _statsTotalAttendees = MakeStatLabel(statsBar, L"Total Attendees: 0", 220);
-        _statsUpcoming       = MakeStatLabel(statsBar, L"Upcoming: 0",        440);
+        _statsTotalEvents    = MakeStatCard(statsBar, L"Total Events",    L"0", Color::FromArgb(67, 97, 238),  10);
+        _statsTotalAttendees = MakeStatCard(statsBar, L"Total Attendees", L"0", Color::FromArgb(25, 135, 84),  220);
+        _statsUpcoming       = MakeStatCard(statsBar, L"Upcoming",        L"0", Color::FromArgb(220, 140, 0),  430);
 
         // ── Scrollable event list ──────────────────────────────────────────
         Panel^ listContainer = gcnew Panel();
         listContainer->Dock        = DockStyle::Fill;
         listContainer->AutoScroll  = true;
-        listContainer->Padding     = System::Windows::Forms::Padding(10);
+        listContainer->Padding     = System::Windows::Forms::Padding(12, 8, 12, 8);
         this->Controls->Add(listContainer);
 
         _eventsFLP               = gcnew FlowLayoutPanel();
@@ -134,15 +138,49 @@ private:
         _eventsFLP->AutoScroll   = true;
         _eventsFLP->FlowDirection = FlowDirection::TopDown;
         _eventsFLP->WrapContents  = false;
-        _eventsFLP->Padding       = System::Windows::Forms::Padding(5);
+        _eventsFLP->Padding       = System::Windows::Forms::Padding(4);
         listContainer->Controls->Add(_eventsFLP);
 
-        // Force paint order: stats before list
         listContainer->BringToFront();
+    }
+
+    Label^ MakeStatCard(Panel^ parent, String^ label, String^ valueText, Color accent, int x)
+    {
+        Panel^ card    = gcnew Panel();
+        card->Location = Point(x, 8);
+        card->Size     = System::Drawing::Size(190, 64);
+        card->BackColor = Color::White;
+        card->BorderStyle = BorderStyle::FixedSingle;
+        parent->Controls->Add(card);
+
+        Panel^ accentBar = gcnew Panel();
+        accentBar->Location = Point(0, 0);
+        accentBar->Size     = System::Drawing::Size(5, 64);
+        accentBar->BackColor = accent;
+        card->Controls->Add(accentBar);
+
+        Label^ valLbl    = gcnew Label();
+        valLbl->Text      = valueText;
+        valLbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 18, FontStyle::Bold);
+        valLbl->ForeColor = accent;
+        valLbl->Location  = Point(14, 8);
+        valLbl->Size      = System::Drawing::Size(160, 30);
+        card->Controls->Add(valLbl);
+
+        Label^ nameLbl    = gcnew Label();
+        nameLbl->Text      = label;
+        nameLbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 9);
+        nameLbl->ForeColor = Color::FromArgb(110, 110, 140);
+        nameLbl->Location  = Point(14, 40);
+        nameLbl->Size      = System::Drawing::Size(160, 18);
+        card->Controls->Add(nameLbl);
+
+        return valLbl;  // returned so RefreshList can update the number
     }
 
     Label^ MakeStatLabel(Panel^ parent, String^ text, int x)
     {
+        // Legacy: kept for binary compat; use MakeStatCard instead
         Label^ lbl    = gcnew Label();
         lbl->Text      = text;
         lbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 12, FontStyle::Bold);
@@ -158,10 +196,10 @@ private:
     // -----------------------------------------------------------------------
     void RefreshList()
     {
-        // Update stats
-        _statsTotalEvents->Text    = L"Total Events: "    + AppState::Manager->GetTotalEvents();
-        _statsTotalAttendees->Text = L"Total Attendees: " + AppState::Manager->GetTotalAttendees();
-        _statsUpcoming->Text       = L"Upcoming: "        + AppState::Manager->GetUpcomingEventCount();
+        // Update stat cards
+        _statsTotalEvents->Text    = AppState::Manager->GetTotalEvents().ToString();
+        _statsTotalAttendees->Text = AppState::Manager->GetTotalAttendees().ToString();
+        _statsUpcoming->Text       = AppState::Manager->GetUpcomingEventCount().ToString();
 
         _eventsFLP->Controls->Clear();
 
@@ -180,7 +218,7 @@ private:
             Label^ empty    = gcnew Label();
             empty->Text      = L"No events yet. Click \"+ Create New Event\" to get started.";
             empty->Font      = gcnew System::Drawing::Font(L"Segoe UI", 12);
-            empty->ForeColor = Color::Gray;
+            empty->ForeColor = Color::FromArgb(150, 152, 180);
             empty->AutoSize  = true;
             empty->Margin    = System::Windows::Forms::Padding(20);
             _eventsFLP->Controls->Add(empty);
@@ -190,44 +228,51 @@ private:
     Panel^ BuildEventRow(EventClass^ ev, int rowW)
     {
         Panel^ row    = gcnew Panel();
-        row->Size      = System::Drawing::Size(rowW, 80);
-        row->Margin    = System::Windows::Forms::Padding(0, 0, 0, 6);
+        row->Size      = System::Drawing::Size(rowW, 86);
+        row->Margin    = System::Windows::Forms::Padding(0, 0, 0, 8);
         row->BackColor = Color::White;
         row->BorderStyle = BorderStyle::FixedSingle;
         row->Tag       = ev->Id;
 
-        // ── Left: thumbnail ──────────────────────────────────────────────
+        // Left category stripe
+        Panel^ stripe    = gcnew Panel();
+        stripe->Size     = System::Drawing::Size(5, 86);
+        stripe->Location = Point(0, 0);
+        stripe->BackColor = EventDetailsPage::CategoryColor(ev->Category);
+        row->Controls->Add(stripe);
+
+        // Thumbnail
         PictureBox^ thumb  = gcnew PictureBox();
         thumb->Size         = System::Drawing::Size(70, 70);
-        thumb->Location     = Point(5, 5);
+        thumb->Location     = Point(14, 8);
         thumb->SizeMode     = PictureBoxSizeMode::Zoom;
-        thumb->BorderStyle  = BorderStyle::FixedSingle;
         if (ev->Icon != nullptr)
             thumb->Image = ev->Icon;
         else
-            thumb->BackColor = Color::LightGray;
+            thumb->BackColor = Color::FromArgb(228, 230, 240);
         row->Controls->Add(thumb);
 
         // ── Center: name + meta ──────────────────────────────────────────
         Label^ nameLbl   = gcnew Label();
         nameLbl->Text     = ev->Name;
         nameLbl->Font     = gcnew System::Drawing::Font(L"Segoe UI", 11, FontStyle::Bold);
-        nameLbl->Location = Point(85, 8);
+        nameLbl->ForeColor = Color::FromArgb(30, 30, 50);
+        nameLbl->Location = Point(94, 10);
         nameLbl->Size     = System::Drawing::Size(rowW - 340, 26);
         nameLbl->AutoEllipsis = true;
         row->Controls->Add(nameLbl);
 
-        String^ meta = ev->Category + L"  |  "
+        String^ meta = ev->Category + L"  \u2022  "
             + ev->StartDateTime.ToString(L"MMM dd, yyyy  h:mm tt")
-            + L"  |  "
+            + L"  \u2022  "
             + ev->RegisteredCount + L" / "
             + (ev->Capacity == 0 ? L"∞" : ev->Capacity.ToString()) + L" registered";
 
         Label^ metaLbl   = gcnew Label();
         metaLbl->Text     = meta;
         metaLbl->Font     = gcnew System::Drawing::Font(L"Segoe UI", 9);
-        metaLbl->ForeColor = Color::Gray;
-        metaLbl->Location = Point(85, 36);
+        metaLbl->ForeColor = Color::FromArgb(110, 110, 140);
+        metaLbl->Location = Point(94, 40);
         metaLbl->Size     = System::Drawing::Size(rowW - 340, 22);
         metaLbl->AutoEllipsis = true;
         row->Controls->Add(metaLbl);
@@ -235,12 +280,12 @@ private:
         // ── Right: action buttons ─────────────────────────────────────────
         int btnRight = rowW - 10;
 
-        Button^ attendBtn   = MakeRowButton(L"Attendees", btnRight - 110, 22, Color::FromArgb(0, 102, 204));
+        Button^ attendBtn   = MakeRowButton(L"Attendees", btnRight - 114, 25, Color::FromArgb(67, 97, 238));
         attendBtn->Tag       = ev->Id;
         attendBtn->Click    += gcnew System::EventHandler(this, &OrganizerDashboardPage::AttendeesBtn_Click);
         row->Controls->Add(attendBtn);
 
-        Button^ editBtn     = MakeRowButton(L"Edit", btnRight - 220, 22, Color::FromArgb(204, 102, 0));
+        Button^ editBtn     = MakeRowButton(L"Edit", btnRight - 228, 25, Color::FromArgb(220, 140, 0));
         editBtn->Tag         = ev->Id;
         editBtn->Click      += gcnew System::EventHandler(this, &OrganizerDashboardPage::EditBtn_Click);
         row->Controls->Add(editBtn);

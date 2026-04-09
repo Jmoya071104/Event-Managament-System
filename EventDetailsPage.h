@@ -71,9 +71,10 @@ private:
         const int lineH = 32;
         Label^ lbl    = gcnew Label();
         lbl->Text     = text;
+        lbl->ForeColor = bold ? Color::FromArgb(30, 30, 50) : Color::FromArgb(70, 70, 100);
         lbl->Location = Point(rxLeft, ry);
         lbl->Size     = System::Drawing::Size(formW - rxLeft - 20, lineH);
-        lbl->Font     = gcnew System::Drawing::Font(L"Microsoft Sans Serif",
+        lbl->Font     = gcnew System::Drawing::Font(L"Segoe UI",
                             (float)fontSize,
                             bold ? FontStyle::Bold : FontStyle::Regular);
         lbl->AutoSize = false;
@@ -83,6 +84,8 @@ private:
 
     void BuildUI()
     {
+        this->BackColor = Color::FromArgb(245, 246, 250);
+
         EventClass^ ev = AppState::Manager->GetEventById(_eventId);
         if (ev == nullptr)
         {
@@ -95,11 +98,16 @@ private:
         int H = this->ClientSize.Height;
 
         // Back button
-        Button^ backBtn = gcnew Button();
-        backBtn->Text     = L"< Back";
-        backBtn->Location = Point(10, 10);
-        backBtn->Size     = System::Drawing::Size(100, 35);
-        backBtn->Click   += gcnew System::EventHandler(this, &EventDetailsPage::BackBtn_Click);
+        Button^ backBtn   = gcnew Button();
+        backBtn->Text      = L"← Back";
+        backBtn->Font      = gcnew System::Drawing::Font(L"Segoe UI", 9);
+        backBtn->FlatStyle = FlatStyle::Flat;
+        backBtn->FlatAppearance->BorderColor = Color::FromArgb(180, 183, 220);
+        backBtn->BackColor = Color::FromArgb(237, 239, 252);
+        backBtn->ForeColor = Color::FromArgb(30, 30, 50);
+        backBtn->Location  = Point(10, 10);
+        backBtn->Size      = System::Drawing::Size(100, 34);
+        backBtn->Click    += gcnew System::EventHandler(this, &EventDetailsPage::BackBtn_Click);
         this->Controls->Add(backBtn);
 
         int contentTop = 60;
@@ -135,7 +143,7 @@ private:
         catLbl->TextAlign = ContentAlignment::MiddleCenter;
         catLbl->BackColor = CategoryColor(ev->Category);
         catLbl->ForeColor = Color::White;
-        catLbl->Font      = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, FontStyle::Bold);
+        catLbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 9, FontStyle::Bold);
         ry += 32;
         this->Controls->Add(catLbl);
 
@@ -149,7 +157,8 @@ private:
         _capacityLabel = gcnew Label();
         _capacityLabel->Location = Point(rxLeft, ry);
         _capacityLabel->Size     = System::Drawing::Size(W - rxLeft - 20, lineH);
-        _capacityLabel->Font     = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11);
+        _capacityLabel->Font      = gcnew System::Drawing::Font(L"Segoe UI", 10);
+        _capacityLabel->ForeColor = Color::FromArgb(70, 70, 100);
         ry += lineH + 4;
         this->Controls->Add(_capacityLabel);
         RefreshCapacityLabel(ev);
@@ -157,10 +166,11 @@ private:
         // Description (below image + meta, full width)
         int descTop = Math::Max(imgBox->Bottom + 16, ry + 16);
         Label^ descTitle = gcnew Label();
-        descTitle->Text     = L"Description";
+        descTitle->Text     = L"About this event";
         descTitle->Location = Point(20, descTop);
         descTitle->Size     = System::Drawing::Size(W - 40, 28);
-        descTitle->Font     = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, FontStyle::Bold);
+        descTitle->Font     = gcnew System::Drawing::Font(L"Segoe UI", 12, FontStyle::Bold);
+        descTitle->ForeColor = Color::FromArgb(30, 30, 50);
         this->Controls->Add(descTitle);
 
         RichTextBox^ descBox = gcnew RichTextBox();
@@ -168,20 +178,27 @@ private:
         descBox->ReadOnly  = true;
         descBox->Location  = Point(20, descTop + 32);
         descBox->Size      = System::Drawing::Size(W - 40, H - (descTop + 32) - 70);
-        descBox->Font      = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11);
+        descBox->Font      = gcnew System::Drawing::Font(L"Segoe UI", 10);
+        descBox->ForeColor = Color::FromArgb(50, 52, 75);
+        descBox->BackColor = Color::White;
         descBox->BorderStyle = BorderStyle::FixedSingle;
         descBox->ScrollBars = RichTextBoxScrollBars::Vertical;
         this->Controls->Add(descBox);
 
         // Action buttons at bottom
         int btnY   = H - 60;
-        int btnW   = 200;
+        int btnW   = 190;
         int btnH   = 40;
-        int btnGap = 20;
+        int btnGap = 14;
         int btnX   = 20;
 
         _registerBtn = gcnew Button();
-        _registerBtn->Text     = L"Register";
+        _registerBtn->Text      = L"Register";
+        _registerBtn->Font      = gcnew System::Drawing::Font(L"Segoe UI", 10, FontStyle::Bold);
+        _registerBtn->BackColor = Color::FromArgb(67, 97, 238);
+        _registerBtn->ForeColor = Color::White;
+        _registerBtn->FlatStyle = FlatStyle::Flat;
+        _registerBtn->FlatAppearance->BorderSize = 0;
         _registerBtn->Location = Point(btnX, btnY);
         _registerBtn->Size     = System::Drawing::Size(btnW, btnH);
         _registerBtn->Click   += gcnew System::EventHandler(this, &EventDetailsPage::RegisterBtn_Click);
@@ -189,7 +206,12 @@ private:
         btnX += btnW + btnGap;
 
         _cancelRegBtn = gcnew Button();
-        _cancelRegBtn->Text     = L"Cancel Registration";
+        _cancelRegBtn->Text      = L"Cancel Registration";
+        _cancelRegBtn->Font      = gcnew System::Drawing::Font(L"Segoe UI", 10, FontStyle::Bold);
+        _cancelRegBtn->BackColor = Color::FromArgb(220, 53, 69);
+        _cancelRegBtn->ForeColor = Color::White;
+        _cancelRegBtn->FlatStyle = FlatStyle::Flat;
+        _cancelRegBtn->FlatAppearance->BorderSize = 0;
         _cancelRegBtn->Location = Point(btnX, btnY);
         _cancelRegBtn->Size     = System::Drawing::Size(btnW, btnH);
         _cancelRegBtn->Click   += gcnew System::EventHandler(this, &EventDetailsPage::CancelRegBtn_Click);
@@ -197,6 +219,9 @@ private:
         btnX += btnW + btnGap;
 
         _saveBtn = gcnew Button();
+        _saveBtn->Font      = gcnew System::Drawing::Font(L"Segoe UI", 10);
+        _saveBtn->FlatStyle = FlatStyle::Flat;
+        _saveBtn->FlatAppearance->BorderSize = 1;
         _saveBtn->Location = Point(btnX, btnY);
         _saveBtn->Size     = System::Drawing::Size(btnW, btnH);
         _saveBtn->Click   += gcnew System::EventHandler(this, &EventDetailsPage::SaveBtn_Click);
@@ -224,12 +249,19 @@ private:
 
         _registerBtn->Enabled   = !isReg && !isFull;
         _registerBtn->Text      = isFull && !isReg ? L"Event Full" : L"Register";
+        _registerBtn->BackColor = (!isReg && !isFull)
+            ? Color::FromArgb(67, 97, 238)
+            : Color::FromArgb(160, 165, 200);
 
         _cancelRegBtn->Enabled  = isReg;
         _cancelRegBtn->Visible  = isReg;
 
         _saveBtn->Text      = isSav ? L"\u2605 Saved" : L"\u2606 Save";
-        _saveBtn->BackColor = isSav ? Color::Gold : SystemColors::Control;
+        _saveBtn->BackColor = isSav ? Color::FromArgb(255, 193, 7) : Color::FromArgb(240, 241, 248);
+        _saveBtn->ForeColor = isSav ? Color::FromArgb(80, 60, 0)   : Color::FromArgb(30, 30, 50);
+        _saveBtn->FlatAppearance->BorderColor = isSav
+            ? Color::FromArgb(220, 160, 0)
+            : Color::FromArgb(180, 182, 210);
     }
 
 public:

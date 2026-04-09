@@ -204,67 +204,76 @@ namespace GroupProject {
 
 		Panel^ MakeEventCard(EventClass^ ev, int cardW)
 		{
-			int cardH = 130;
+			const int cardH = 148;
 
 			Panel^ card     = gcnew Panel();
 			card->Size      = System::Drawing::Size(cardW, cardH);
 			card->BorderStyle = BorderStyle::FixedSingle;
 			card->BackColor = Color::White;
-			card->Margin    = System::Windows::Forms::Padding(0, 0, 0, 6);
+			card->Margin    = System::Windows::Forms::Padding(0, 0, 0, 8);
+
+			// Left colored category stripe
+			Panel^ stripe    = gcnew Panel();
+			stripe->Size     = System::Drawing::Size(5, cardH);
+			stripe->Location = Point(0, 0);
+			stripe->BackColor = EventDetailsPage::CategoryColor(ev->Category);
+			card->Controls->Add(stripe);
 
 			// Thumbnail
 			PictureBox^ thumb  = gcnew PictureBox();
-			thumb->Size        = System::Drawing::Size(100, 100);
-			thumb->Location    = Point(8, 15);
+			thumb->Size        = System::Drawing::Size(106, 106);
+			thumb->Location    = Point(16, 21);
 			thumb->SizeMode    = PictureBoxSizeMode::StretchImage;
 			thumb->Image       = ev->Icon;
-			if (ev->Icon == nullptr) thumb->BackColor = Color::LightGray;
+			if (ev->Icon == nullptr) thumb->BackColor = Color::FromArgb(228, 230, 240);
 			card->Controls->Add(thumb);
 
-			int textX  = 118;
-			int btnRightEdge = cardW - 10;
+			const int textX  = 134;
+			const int btnRightEdge = cardW - 10;
+			const int textW  = btnRightEdge - textX - 250;
 
 			// Title
 			Label^ titleLbl        = gcnew Label();
 			titleLbl->Text         = ev->Name;
 			titleLbl->Font         = gcnew Drawing::Font(L"Segoe UI", 11.0F, FontStyle::Bold);
-			titleLbl->Location     = Point(textX, 8);
-			titleLbl->Size         = System::Drawing::Size(btnRightEdge - textX - 240, 24);
+			titleLbl->ForeColor    = Color::FromArgb(30, 30, 50);
+			titleLbl->Location     = Point(textX, 10);
+			titleLbl->Size         = System::Drawing::Size(textW, 24);
 			titleLbl->AutoEllipsis = true;
 			card->Controls->Add(titleLbl);
 
 			// Organizer | Location
 			Label^ metaLbl        = gcnew Label();
-			metaLbl->Text         = ev->Runner + L"  |  " + ev->Location;
+			metaLbl->Text         = ev->Runner + L"  •  " + ev->Location;
 			metaLbl->Font         = gcnew Drawing::Font(L"Segoe UI", 9.0F);
-			metaLbl->ForeColor    = Color::DimGray;
-			metaLbl->Location     = Point(textX, 34);
-			metaLbl->Size         = System::Drawing::Size(btnRightEdge - textX - 240, 20);
+			metaLbl->ForeColor    = Color::FromArgb(110, 110, 140);
+			metaLbl->Location     = Point(textX, 36);
+			metaLbl->Size         = System::Drawing::Size(textW, 20);
 			metaLbl->AutoEllipsis = true;
 			card->Controls->Add(metaLbl);
 
 			// Date range
 			Label^ dateLbl        = gcnew Label();
-			dateLbl->Text         = ev->StartDateTime.ToString(L"MMM dd, yyyy h:mm tt")
-			                      + L"  \x2192  "
-			                      + ev->EndDateTime.ToString(L"MMM dd, yyyy h:mm tt");
+			dateLbl->Text         = ev->StartDateTime.ToString(L"MMM dd, yyyy  h:mm tt")
+			                      + L"  →  "
+			                      + ev->EndDateTime.ToString(L"MMM dd, yyyy  h:mm tt");
 			dateLbl->Font         = gcnew Drawing::Font(L"Segoe UI", 9.0F);
-			dateLbl->ForeColor    = Color::DimGray;
-			dateLbl->Location     = Point(textX, 56);
-			dateLbl->Size         = System::Drawing::Size(btnRightEdge - textX - 240, 20);
+			dateLbl->ForeColor    = Color::FromArgb(110, 110, 140);
+			dateLbl->Location     = Point(textX, 58);
+			dateLbl->Size         = System::Drawing::Size(textW, 20);
 			dateLbl->AutoEllipsis = true;
 			card->Controls->Add(dateLbl);
 
 			// Capacity
 			String^ capText = (ev->Capacity == 0)
-			    ? L"Capacity: Unlimited"
-			    : L"Capacity: " + ev->RegisteredCount + L" / " + ev->Capacity;
+			    ? L"Unlimited capacity"
+			    : ev->RegisteredCount + L" / " + ev->Capacity + L" registered";
 			Label^ capLbl     = gcnew Label();
 			capLbl->Text      = capText;
 			capLbl->Font      = gcnew Drawing::Font(L"Segoe UI", 9.0F);
-			capLbl->ForeColor = Color::DimGray;
-			capLbl->Location  = Point(textX, 78);
-			capLbl->Size      = System::Drawing::Size(btnRightEdge - textX - 240, 20);
+			capLbl->ForeColor = Color::FromArgb(110, 110, 140);
+			capLbl->Location  = Point(textX, 80);
+			capLbl->Size      = System::Drawing::Size(textW, 20);
 			card->Controls->Add(capLbl);
 
 			// Category badge
@@ -273,8 +282,8 @@ namespace GroupProject {
 			badge->Font      = gcnew Drawing::Font(L"Segoe UI", 8.5F, FontStyle::Bold);
 			badge->ForeColor = Color::White;
 			badge->BackColor = EventDetailsPage::CategoryColor(ev->Category);
-			badge->Size      = System::Drawing::Size(90, 22);
-			badge->Location  = Point(textX, 100);
+			badge->Size      = System::Drawing::Size(94, 22);
+			badge->Location  = Point(textX, 108);
 			badge->TextAlign = ContentAlignment::MiddleCenter;
 			card->Controls->Add(badge);
 
@@ -282,11 +291,12 @@ namespace GroupProject {
 			Button^ detailsBtn    = gcnew Button();
 			detailsBtn->Text      = L"View Details";
 			detailsBtn->Font      = gcnew Drawing::Font(L"Segoe UI", 9.0F, FontStyle::Bold);
-			detailsBtn->Size      = System::Drawing::Size(115, 34);
-			detailsBtn->Location  = Point(btnRightEdge - 240, 48);
-			detailsBtn->BackColor = Color::SteelBlue;
+			detailsBtn->Size      = System::Drawing::Size(118, 36);
+			detailsBtn->Location  = Point(btnRightEdge - 248, 56);
+			detailsBtn->BackColor = Color::FromArgb(67, 97, 238);
 			detailsBtn->ForeColor = Color::White;
 			detailsBtn->FlatStyle = FlatStyle::Flat;
+			detailsBtn->FlatAppearance->BorderSize = 0;
 			detailsBtn->Tag       = ev->Id.ToString();
 			detailsBtn->Click    += gcnew System::EventHandler(this, &EventsPage::ViewDetails_Click);
 			card->Controls->Add(detailsBtn);
@@ -296,10 +306,13 @@ namespace GroupProject {
 			Button^ saveBtn    = gcnew Button();
 			saveBtn->Text      = saved ? L"\u2605 Saved" : L"\u2606 Save";
 			saveBtn->Font      = gcnew Drawing::Font(L"Segoe UI", 9.0F);
-			saveBtn->Size      = System::Drawing::Size(115, 34);
-			saveBtn->Location  = Point(btnRightEdge - 118, 48);
-			saveBtn->BackColor = saved ? Color::Gold : Color::LightGray;
+			saveBtn->Size      = System::Drawing::Size(118, 36);
+			saveBtn->Location  = Point(btnRightEdge - 122, 56);
+			saveBtn->BackColor = saved ? Color::FromArgb(255, 193, 7) : Color::FromArgb(240, 241, 248);
+			saveBtn->ForeColor = saved ? Color::FromArgb(80, 60, 0) : Color::FromArgb(50, 55, 100);
 			saveBtn->FlatStyle = FlatStyle::Flat;
+			saveBtn->FlatAppearance->BorderSize = 1;
+			saveBtn->FlatAppearance->BorderColor = saved ? Color::FromArgb(220, 160, 0) : Color::FromArgb(180, 182, 210);
 			saveBtn->Tag       = ev->Id.ToString();
 			saveBtn->Click    += gcnew System::EventHandler(this, &EventsPage::SaveToggle_Click);
 			card->Controls->Add(saveBtn);
@@ -336,7 +349,9 @@ namespace GroupProject {
 			PersistenceService::Save(AppState::Manager, AppState::Session);
 			bool nowSaved  = AppState::Session->IsSaved(id);
 			btn->Text      = nowSaved ? L"\u2605 Saved" : L"\u2606 Save";
-			btn->BackColor = nowSaved ? Color::Gold : Color::LightGray;
+			btn->BackColor = nowSaved ? Color::FromArgb(255, 193, 7) : Color::FromArgb(240, 241, 248);
+			btn->ForeColor = nowSaved ? Color::FromArgb(80, 60, 0)   : Color::FromArgb(50, 55, 100);
+			btn->FlatAppearance->BorderColor = nowSaved ? Color::FromArgb(220, 160, 0) : Color::FromArgb(180, 182, 210);
 		}
 
 		void MyEventsBtn_Click(System::Object^ sender, System::EventArgs^ e)

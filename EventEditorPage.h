@@ -87,16 +87,18 @@ private:
         // ── Top bar ─────────────────────────────────────────────────────────
         Panel^ topBar = gcnew Panel();
         topBar->Dock      = DockStyle::Top;
-        topBar->Height    = 55;
-        topBar->BackColor = Color::FromArgb(30, 30, 60);
+        topBar->Height    = 62;
+        topBar->BackColor = Color::FromArgb(24, 28, 58);
         this->Controls->Add(topBar);
+        this->BackColor   = Color::FromArgb(245, 246, 250);
 
         Button^ backBtn    = gcnew Button();
-        backBtn->Text       = L"< Back";
-        backBtn->Location   = Point(10, 11);
-        backBtn->Size       = System::Drawing::Size(90, 33);
+        backBtn->Text       = L"\u2190 Back";
+        backBtn->Location   = Point(10, 14);
+        backBtn->Size       = System::Drawing::Size(80, 34);
         backBtn->ForeColor  = Color::White;
         backBtn->FlatStyle  = FlatStyle::Flat;
+        backBtn->FlatAppearance->BorderColor = Color::FromArgb(80, 85, 130);
         backBtn->Click     += gcnew System::EventHandler(this, &EventEditorPage::BackBtn_Click);
         topBar->Controls->Add(backBtn);
 
@@ -104,14 +106,17 @@ private:
         titleLbl->Text      = (_eventId == -1) ? L"Create New Event" : L"Edit Event";
         titleLbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 15, FontStyle::Bold);
         titleLbl->ForeColor = Color::White;
-        titleLbl->Location  = Point(115, 12);
-        titleLbl->AutoSize  = true;
+        titleLbl->Location  = Point(100, 0);
+        titleLbl->Size       = System::Drawing::Size(W - 220, 62);
+        titleLbl->AutoSize   = false;
+        titleLbl->TextAlign  = ContentAlignment::MiddleLeft;
         topBar->Controls->Add(titleLbl);
 
         // ── Scrollable body ─────────────────────────────────────────────────
         Panel^ body = gcnew Panel();
         body->Dock       = DockStyle::Fill;
         body->AutoScroll = true;
+        body->BackColor  = Color::FromArgb(245, 246, 250);
         body->Padding    = System::Windows::Forms::Padding(30, 20, 30, 20);
         this->Controls->Add(body);
 
@@ -224,7 +229,11 @@ private:
         browseBtn->Text      = L"Browse...";
         browseBtn->Location  = Point(vx + fw - 110, y);
         browseBtn->Size      = System::Drawing::Size(110, ih);
+        browseBtn->BackColor = Color::FromArgb(237, 239, 252);
+        browseBtn->ForeColor = Color::FromArgb(30, 30, 50);
         browseBtn->FlatStyle = FlatStyle::Flat;
+        browseBtn->FlatAppearance->BorderColor = Color::FromArgb(200, 202, 230);
+        browseBtn->FlatAppearance->BorderSize = 1;
         browseBtn->Click    += gcnew System::EventHandler(this, &EventEditorPage::BrowseImage_Click);
         body->Controls->Add(browseBtn);
         y += ih + gap;
@@ -235,7 +244,7 @@ private:
         _imagePreview->Size      = System::Drawing::Size(160, 120);
         _imagePreview->SizeMode  = PictureBoxSizeMode::Zoom;
         _imagePreview->BorderStyle = BorderStyle::FixedSingle;
-        _imagePreview->BackColor = Color::LightGray;
+        _imagePreview->BackColor = Color::FromArgb(228, 230, 240);
         body->Controls->Add(_imagePreview);
         y += 120 + gap * 2;
 
@@ -244,9 +253,10 @@ private:
         saveBtn->Text      = (_eventId == -1) ? L"Create Event" : L"Save Changes";
         saveBtn->Location  = Point(vx, y);
         saveBtn->Size      = System::Drawing::Size(200, 40);
-        saveBtn->BackColor = Color::FromArgb(0, 153, 76);
+        saveBtn->BackColor = Color::FromArgb(25, 135, 84);
         saveBtn->ForeColor = Color::White;
         saveBtn->FlatStyle = FlatStyle::Flat;
+        saveBtn->FlatAppearance->BorderSize = 0;
         saveBtn->Click    += gcnew System::EventHandler(this, &EventEditorPage::SaveBtn_Click);
         body->Controls->Add(saveBtn);
 
@@ -257,9 +267,10 @@ private:
             _deleteBtn->Text      = L"Delete Event";
             _deleteBtn->Location  = Point(vx + 220, y);
             _deleteBtn->Size      = System::Drawing::Size(160, 40);
-            _deleteBtn->BackColor = Color::FromArgb(192, 0, 0);
+            _deleteBtn->BackColor = Color::FromArgb(220, 53, 69);
             _deleteBtn->ForeColor = Color::White;
             _deleteBtn->FlatStyle = FlatStyle::Flat;
+            _deleteBtn->FlatAppearance->BorderSize = 0;
             _deleteBtn->Click    += gcnew System::EventHandler(this, &EventEditorPage::DeleteBtn_Click);
             body->Controls->Add(_deleteBtn);
         }

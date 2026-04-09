@@ -142,16 +142,18 @@ private:
         // ── Top bar ────────────────────────────────────────────────────────
         Panel^ topBar = gcnew Panel();
         topBar->Dock      = DockStyle::Top;
-        topBar->Height    = 60;
-        topBar->BackColor = Color::FromArgb(30, 30, 60);
+        topBar->Height    = 62;
+        topBar->BackColor = Color::FromArgb(24, 28, 58);
         this->Controls->Add(topBar);
+        this->BackColor   = Color::FromArgb(245, 246, 250);
 
         Button^ backBtn   = gcnew Button();
-        backBtn->Text      = L"< Back";
-        backBtn->Location  = Point(10, 13);
-        backBtn->Size      = System::Drawing::Size(90, 34);
+        backBtn->Text      = L"\u2190 Back";
+        backBtn->Location  = Point(10, 14);
+        backBtn->Size      = System::Drawing::Size(80, 34);
         backBtn->ForeColor = Color::White;
         backBtn->FlatStyle = FlatStyle::Flat;
+        backBtn->FlatAppearance->BorderColor = Color::FromArgb(80, 85, 130);
         backBtn->Click    += gcnew System::EventHandler(this, &AttendeeManagementPage::BackBtn_Click);
         topBar->Controls->Add(backBtn);
 
@@ -159,18 +161,21 @@ private:
         titleLbl->Text      = L"Attendees — " + evName;
         titleLbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 14, FontStyle::Bold);
         titleLbl->ForeColor = Color::White;
-        titleLbl->Location  = Point(115, 14);
-        titleLbl->AutoSize  = true;
+        titleLbl->Location  = Point(100, 0);
+        titleLbl->Size      = System::Drawing::Size(W - 260, 62);
+        titleLbl->AutoSize  = false;
+        titleLbl->TextAlign = ContentAlignment::MiddleLeft;
         topBar->Controls->Add(titleLbl);
 
         // Export CSV button
         Button^ exportBtn   = gcnew Button();
         exportBtn->Text      = L"Export CSV";
-        exportBtn->Location  = Point(W - 140, 13);
+        exportBtn->Location  = Point(W - 140, 14);
         exportBtn->Size      = System::Drawing::Size(120, 34);
-        exportBtn->BackColor = Color::FromArgb(60, 60, 100);
+        exportBtn->BackColor = Color::FromArgb(67, 97, 238);
         exportBtn->ForeColor = Color::White;
         exportBtn->FlatStyle = FlatStyle::Flat;
+        exportBtn->FlatAppearance->BorderSize = 0;
         exportBtn->Anchor    = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Right);
         exportBtn->Click    += gcnew System::EventHandler(this, &AttendeeManagementPage::ExportCSV_Click);
         topBar->Controls->Add(exportBtn);
@@ -179,7 +184,7 @@ private:
         Panel^ statsBar = gcnew Panel();
         statsBar->Dock      = DockStyle::Top;
         statsBar->Height    = 45;
-        statsBar->BackColor = Color::FromArgb(245, 245, 250);
+        statsBar->BackColor = Color::FromArgb(248, 249, 252);
         statsBar->Padding   = System::Windows::Forms::Padding(15, 8, 15, 8);
         this->Controls->Add(statsBar);
 
@@ -234,7 +239,7 @@ private:
         Panel^ headerRow = gcnew Panel();
         headerRow->Dock      = DockStyle::Top;
         headerRow->Height    = 36;
-        headerRow->BackColor = Color::FromArgb(220, 220, 240);
+        headerRow->BackColor = Color::FromArgb(237, 239, 252);
         this->Controls->Add(headerRow);
         BuildHeaderRow(headerRow);
 
@@ -315,7 +320,7 @@ private:
                 ? L"No attendees have registered for this event yet."
                 : L"No attendees match your search.";
             empty->Font      = gcnew System::Drawing::Font(L"Segoe UI", 11);
-            empty->ForeColor = Color::Gray;
+            empty->ForeColor = Color::FromArgb(150, 152, 180);
             empty->AutoSize  = true;
             empty->Margin    = System::Windows::Forms::Padding(20);
             _listFLP->Controls->Add(empty);
