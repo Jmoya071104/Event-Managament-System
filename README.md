@@ -4,13 +4,22 @@ A Windows Forms application built with C++/CLI (.NET) for managing events.
 
 ## Features
 
+### Attendee
 - Browse upcoming events with search and category filtering
 - View full event details (organizer, location, date/time, capacity, description)
 - Register and cancel registration for events
 - Save / unsave events for later
 - "My Events" page with tabs for registered and saved events
-- Create new events as an organizer
-- Persistent storage — event and session data saved to `%APPDATA%\EventApp\`
+
+### Organizer
+- Organizer Dashboard with live stats (total events, attendees, upcoming count)
+- Create new events with name, organizer, location, category, date/time, capacity, description, and image
+- Edit existing events (all fields); changes reflect immediately in the dashboard
+- Delete events with confirmation — automatically cleans up all registrations
+- Per-event attendee management: searchable roster, check-in tracking, CSV export to desktop
+
+### General
+- Persistent storage — events and session data saved to `%APPDATA%\EventApp\`
 - Preloaded sample events across Music, Sports, Tech, Art, Food, and Academic categories
 
 ## Requirements
@@ -40,3 +49,6 @@ A Windows Forms application built with C++/CLI (.NET) for managing events.
 | `EventsPage.h / .cpp` | Browse events with search, category filter, and card layout |
 | `EventDetailsPage.h` | Full event detail page with Register / Save actions |
 | `MyEventsPage.h` | Attendee page with Registered and Saved Events tabs |
+| `OrganizerDashboardPage.h` | Organizer hub: event list, stats, navigation to create/edit/attendees |
+| `EventEditorPage.h` | Unified create and edit form for events (with delete in edit mode) |
+| `AttendeeManagementPage.h` | Per-event attendee roster with search, check-in, and CSV export |

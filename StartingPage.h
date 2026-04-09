@@ -12,11 +12,7 @@
 namespace GroupProject {
 
 	using namespace System;
-	using namespace System::ComponentModel;
-	using namespace System::Collections;
-	using namespace System::Windows::Forms;
-	using namespace System::Data;
-	using namespace System::Drawing;
+		using namespace System::Windows::Forms;
 
 	public ref class StartingPage : public System::Windows::Forms::Form
 	{
@@ -27,7 +23,7 @@ namespace GroupProject {
 	private:
 		System::ComponentModel::Container ^components;
 		Label^  TitleLabel     = gcnew Label();
-		Button^ CreateEventBtn = gcnew Button();
+		Button^ OrganizerBtn  = gcnew Button();
 		Button^ ViewEventsBtn  = gcnew Button();
 		Button^ MyEventsBtn    = gcnew Button();
 
@@ -72,12 +68,12 @@ namespace GroupProject {
 		this->MyEventsBtn->UseVisualStyleBackColor = true;
 		this->MyEventsBtn->Click   += gcnew System::EventHandler(this, &StartingPage::MyEvents_Click);
 		this->Controls->Add(MyEventsBtn);
-		this->CreateEventBtn->Location = System::Drawing::Point((int)(W*0.25),(int)(H*.62));
-		this->CreateEventBtn->Size     = System::Drawing::Size((int)(W*0.50),(int)(H*0.13));
-		this->CreateEventBtn->Text     = L"Organizer Dashboard";
-		this->CreateEventBtn->UseVisualStyleBackColor = true;
-		this->CreateEventBtn->Click   += gcnew System::EventHandler(this, &StartingPage::OrganizerDashboard_Click);
-		this->Controls->Add(CreateEventBtn);
+		this->OrganizerBtn->Location = System::Drawing::Point((int)(W*0.25),(int)(H*.62));
+		this->OrganizerBtn->Size     = System::Drawing::Size((int)(W*0.50),(int)(H*0.13));
+		this->OrganizerBtn->Text     = L"Organizer Dashboard";
+		this->OrganizerBtn->UseVisualStyleBackColor = true;
+		this->OrganizerBtn->Click   += gcnew System::EventHandler(this, &StartingPage::OrganizerDashboard_Click);
+		this->Controls->Add(OrganizerBtn);
 	}
 
 	private: System::Void ViewEvents_Click(System::Object^ sender, System::EventArgs^ e)

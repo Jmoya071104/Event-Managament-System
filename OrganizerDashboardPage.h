@@ -290,15 +290,8 @@ private:
         OpenAttendeeManager(id);
     }
 
-    void OpenEditorForEvent(int eventId);     // body in OrganizerDashboardPage.cpp (or inline after includes)
-    void OpenAttendeeManager(int eventId);    // body in OrganizerDashboardPage.cpp (or inline after includes)
-
-public:
-    // Called by EventEditorPage after a successful save so the dashboard refreshes.
-    void NotifyChanged()
-    {
-        RefreshList();
-    }
+    void OpenEditorForEvent(int eventId);     // body defined after EventEditorPage include
+    void OpenAttendeeManager(int eventId);    // body defined after AttendeeManagementPage include
 };
 
 } // namespace GroupProject

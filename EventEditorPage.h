@@ -8,10 +8,11 @@ using namespace System;
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
 
-// Single page that handles both Create (eventId == -1) and Edit (eventId >= 0) modes.
-// On save:  updates/adds the event, calls PersistenceService::Save, then closes.
+// Shows a unified create/edit form for events.
+// Pass eventId == -1 for create mode, or a valid Id for edit mode.
+// On save: creates or updates the event, calls PersistenceService::Save, then closes.
 // On delete (edit mode only): confirms, removes event, saves, then closes.
-// Caller (OrganizerDashboardPage) is shown again via NotifyChanged() + OnFormClosed.
+// The caller form is shown again via OnFormClosed.
 public ref class EventEditorPage : public System::Windows::Forms::Form
 {
 private:
@@ -122,7 +123,7 @@ private:
         int  ih  = 32;    // input height
         int  gap = 12;    // gap between rows
 
-        // Helper lambdas replaced by inline code below
+        // Fields are built top-to-bottom; AddLabel / AddTextBox helpers keep layout consistent.
 
         // Event Name
         AddLabel(body, L"Event Name *", cx, y, lh);

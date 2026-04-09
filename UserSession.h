@@ -22,11 +22,4 @@ public:
     void Unsave(int id)             { SavedIds->Remove(id); }
     bool IsRegistered(int id)       { return RegisteredIds->Contains(id); }
     bool IsSaved(int id)            { return SavedIds->Contains(id); }
-
-    // Clear all state (used when resetting / testing)
-    void Clear()
-    {
-        RegisteredIds->Clear();
-        SavedIds->Clear();
-    }
 };
