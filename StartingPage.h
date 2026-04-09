@@ -1,6 +1,11 @@
 #pragma once
+#include "AppState.h"
+#include "SeedData.h"
+#include "PersistenceService.h"
+#include "EventDetailsPage.h"
+#include "MyEventsPage.h"
 #include "EventsPage.h"
-#include "EventManager.h";
+#include "EventManager.h"
 #include "EventClass.h"
 
 namespace GroupProject {
@@ -46,15 +51,12 @@ namespace GroupProject {
 
 		Label^ TitleLabel = gcnew Label();
 
-		Button^ CreateEventBtn = gcnew Button();
+		Button^ CreateEventBtn  = gcnew Button();
+		Button^ ViewEventsBtn   = gcnew Button();
+		Button^ MyEventsBtn     = gcnew Button();
+		Button^ ExitBtn         = gcnew Button();
 
-		Button^ ViewEventsBtn = gcnew Button();
-
-		Button^ EditEventsBtn = gcnew Button();
-
-		Button^ ExitBtn = gcnew Button();
-
-		EventManager^ Manager = gcnew EventManager();
+		// EditEventsBtn removed — Phase 2 scope
 
 
 
@@ -81,51 +83,55 @@ namespace GroupProject {
 		}
 #pragma endregion
 	private: System::Void StartingPage_Load(System::Object^ sender, System::EventArgs^ e) {
+		// --- Initialize shared state and load/seed data on first launch ---
+		AppState::Initialize();
+		bool hadSavedData = PersistenceService::Load(AppState::Manager, AppState::Session);
+		if (!hadSavedData)
+			SeedData::Seed(AppState::Manager);
+
 		this->WindowState = FormWindowState::Maximized;
 
-
-		float windowWidth = this->ClientSize.Width;
+		float windowWidth  = this->ClientSize.Width;
 		float windowHeight = this->ClientSize.Height;
 
-		//Title Label
-		this->TitleLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 25, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+		// Title Label
+		this->TitleLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 25,
+			System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 			static_cast<System::Byte>(0)));
 		this->TitleLabel->Location = System::Drawing::Point(windowWidth * 0.25, 0);
-		this->TitleLabel->Size = System::Drawing::Size(windowWidth * 0.5, windowHeight * 0.25);
+		this->TitleLabel->Size = System::Drawing::Size(windowWidth * 0.5, windowHeight * 0.20);
 		this->TitleLabel->TabIndex = 0;
 		this->TitleLabel->Text = L"Event Management System";
 		this->TitleLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 		TitleLabel->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 		this->Controls->Add(TitleLabel);
-		
-		//Create Event Btn
-		this->CreateEventBtn->Location = System::Drawing::Point(windowWidth * 0.25, windowHeight * .325);
-		this->CreateEventBtn->Size = System::Drawing::Size(windowWidth * 0.50, windowHeight * 0.15);
-		this->CreateEventBtn->TabIndex = 1;
-		this->CreateEventBtn->Text = L"Create Events";
-		this->CreateEventBtn->UseVisualStyleBackColor = true;
-		this->CreateEventBtn->Click += gcnew System::EventHandler(this, &StartingPage::createEvent_Click);
-		this->Controls->Add(CreateEventBtn);
 
-		//ViewEvents Btn
-		this->ViewEventsBtn->Location = System::Drawing::Point(windowWidth * 0.25, windowHeight * .55);
-		this->ViewEventsBtn->Size = System::Drawing::Size(windowWidth * 0.50, windowHeight * 0.15);
+		// Browse Events button (attendee entry)
+		this->ViewEventsBtn->Location = System::Drawing::Point(windowWidth * 0.25, windowHeight * .28);
+		this->ViewEventsBtn->Size = System::Drawing::Size(windowWidth * 0.50, windowHeight * 0.13);
 		this->ViewEventsBtn->TabIndex = 1;
-		this->ViewEventsBtn->Text = L"View Available Events";
+		this->ViewEventsBtn->Text = L"Browse Events";
 		this->ViewEventsBtn->UseVisualStyleBackColor = true;
 		this->ViewEventsBtn->Click += gcnew System::EventHandler(this, &StartingPage::ViewEvents_Click);
 		this->Controls->Add(ViewEventsBtn);
 
+		// My Events button
+		this->MyEventsBtn->Location = System::Drawing::Point(windowWidth * 0.25, windowHeight * .45);
+		this->MyEventsBtn->Size = System::Drawing::Size(windowWidth * 0.50, windowHeight * 0.13);
+		this->MyEventsBtn->TabIndex = 2;
+		this->MyEventsBtn->Text = L"My Events";
+		this->MyEventsBtn->UseVisualStyleBackColor = true;
+		this->MyEventsBtn->Click += gcnew System::EventHandler(this, &StartingPage::MyEvents_Click);
+		this->Controls->Add(MyEventsBtn);
 
-		//Edit Event Btn
-		this->EditEventsBtn->Location = System::Drawing::Point(windowWidth * 0.25, windowHeight * .775);
-		this->EditEventsBtn->Size = System::Drawing::Size(windowWidth * 0.50, windowHeight * 0.15);
-		this->EditEventsBtn->TabIndex = 1;
-		this->EditEventsBtn->Text = L"Edit Existing Event";
-		this->EditEventsBtn->UseVisualStyleBackColor = true;
-		//this->CreateEventBtn->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
-		this->Controls->Add(EditEventsBtn);
-
+		// Create Event button (organizer — secondary)
+		this->CreateEventBtn->Location = System::Drawing::Point(windowWidth * 0.25, windowHeight * .62);
+		this->CreateEventBtn->Size = System::Drawing::Size(windowWidth * 0.50, windowHeight * 0.13);
+		this->CreateEventBtn->TabIndex = 3;
+		this->CreateEventBtn->Text = L"Create Event (Organizer)";
+		this->CreateEventBtn->UseVisualStyleBackColor = true;
+		this->CreateEventBtn->Click += gcnew System::EventHandler(this, &StartingPage::createEvent_Click);
+		this->Controls->Add(CreateEventBtn);
 	}
 
 		   //Create Event Button
@@ -420,53 +426,63 @@ namespace GroupProject {
 		Button^ btn = safe_cast<Button^>(sender);
 		Panel^ panel = safe_cast<Panel^>(btn->Parent);
 
-		String^ EventName = panel->Controls["EventNameTB"]->Text;
-		String^ EventRunner = panel->Controls["EventRunnerTB"]->Text;
-		String^ EventLocation = panel->Controls["EventLocationTB"]->Text;
+		String^ EventName        = panel->Controls["EventNameTB"]->Text;
+		String^ EventRunner      = panel->Controls["EventRunnerTB"]->Text;
+		String^ EventLocation    = panel->Controls["EventLocationTB"]->Text;
 		String^ EventDescription = panel->Controls["DescriptionTB"]->Text;
 		DateTime StartValue = safe_cast<DateTimePicker^>(panel->Controls["StartDT"])->Value;
-		DateTime EndValue = safe_cast<DateTimePicker^>(panel->Controls["EndDT"])->Value;
-		Image^ icon = safe_cast<PictureBox^>(panel->Controls["ThumbnailImage"])->Image;
+		DateTime EndValue   = safe_cast<DateTimePicker^>(panel->Controls["EndDT"])->Value;
+		Image^   icon       = safe_cast<PictureBox^>(panel->Controls["ThumbnailImage"])->Image;
 
-		if (String::IsNullOrEmpty(EventName) 
+		if (String::IsNullOrEmpty(EventName)
 			|| String::IsNullOrEmpty(EventRunner)
 			|| String::IsNullOrEmpty(EventLocation)
-			|| String::IsNullOrEmpty(EventDescription)) {
-
+			|| String::IsNullOrEmpty(EventDescription))
+		{
 			MessageBox::Show("Please Fill In All Necessary Fields");
 		}
-		else if(StartValue < DateTime::Now || EndValue < DateTime::Now) {
+		else if (StartValue < DateTime::Now || EndValue < DateTime::Now)
+		{
 			MessageBox::Show("Please Ensure Start Time and End Times are not in the past");
-
-		}else if (EndValue < StartValue) {
+		}
+		else if (EndValue < StartValue)
+		{
 			MessageBox::Show("End Date Cannot Be Before Start Date");
-		}else {
-			EventClass^ newEvent = gcnew EventClass(EventName, EventRunner, EventLocation, EventDescription, StartValue, EndValue, icon);
+		}
+		else
+		{
+			// Legacy constructor: Category defaults to "Other", Capacity = 0 (unlimited)
+			EventClass^ newEvent = gcnew EventClass(
+				EventName, EventRunner, EventLocation, EventDescription,
+				StartValue, EndValue, icon);
 
-			Manager->addEvent(newEvent);
+			AppState::Manager->addEvent(newEvent);
+			PersistenceService::Save(AppState::Manager, AppState::Session);
 
 			MessageBox::Show("Event Created");
 
-			panel->Controls["EventNameTB"]->Text = L"";
-			panel->Controls["EventRunnerTB"]->Text = L"";
+			panel->Controls["EventNameTB"]->Text     = L"";
+			panel->Controls["EventRunnerTB"]->Text   = L"";
 			panel->Controls["EventLocationTB"]->Text = L"";
-			panel->Controls["DescriptionTB"]->Text = L"";
+			panel->Controls["DescriptionTB"]->Text   = L"";
 			safe_cast<DateTimePicker^>(panel->Controls["StartDT"])->Value = DateTime::Now;
-			safe_cast<DateTimePicker^>(panel->Controls["EndDT"])->Value = DateTime::Now;
+			safe_cast<DateTimePicker^>(panel->Controls["EndDT"])->Value   = DateTime::Now;
 			panel->Parent->Controls->Remove(panel);
-
 		}
-		
 	}
 
 		   //ViewEventBTN
 	private: System::Void ViewEvents_Click(System::Object^ sender, System::EventArgs^ e) {
-		EventsPage^ newForm = gcnew EventsPage(Manager, this);
-
+		EventsPage^ newForm = gcnew EventsPage(this);
 		this->Hide();
-
 		newForm->Show();
+	}
 
+	private: System::Void MyEvents_Click(System::Object^ sender, System::EventArgs^ e) {
+		// Forward declaration included via MyEventsPage.h
+		MyEventsPage^ myPage = gcnew MyEventsPage(this);
+		this->Hide();
+		myPage->Show();
 	}
 
 	private: System::Void UploadImageBtn_Click(System::Object^ sender, System::EventArgs^ e) {
