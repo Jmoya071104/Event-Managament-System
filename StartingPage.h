@@ -69,9 +69,9 @@ namespace GroupProject {
 		void InitializeComponent(void)
 		{
 			this->SuspendLayout();
-			// 
+			//
 			// StartingPage
-			// 
+			//
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(282, 253);
@@ -190,7 +190,7 @@ namespace GroupProject {
 
 		//EventName and text box
 		{
-			
+
 			EventName->Location = System::Drawing::Point(0, CreateEventPanel->Height * 0.1);
 			EventName->Size = System::Drawing::Size(CreateEventPanel->Width * .15, CreateEventPanel->Height * 0.05);
 			EventName->Font = (gcnew System::Drawing::Font(L"Times New Roman", 12.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -255,7 +255,7 @@ namespace GroupProject {
 			Preview->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			Preview->AutoSize = true;
 			CreateEventPanel->Controls->Add(Preview);
-			
+
 			ThumbnailImage->Name = "ThumbnailImage"; // MUST match the string you used
 			ThumbnailImage->Size = System::Drawing::Size(CreateEventPanel->Height * 0.35, CreateEventPanel->Height * 0.35);
 			ThumbnailImage->Location = Point(CreateEventPanel->Width * 0.025, CreateEventPanel->Height * 0.4);
@@ -506,10 +506,10 @@ namespace GroupProject {
 			}
 		}
 	}
-		   
 
 
-		  
+
+
 
 	};
 }
