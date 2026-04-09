@@ -126,7 +126,9 @@
     <ClCompile Include="StartingPage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AppState.h" />
     <ClInclude Include="EventClass.h" />
+    <ClInclude Include="EventDetailsPage.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="EventsPage.h">
       <FileType>CppForm</FileType>
@@ -134,6 +136,10 @@
     <ClInclude Include="StartingPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="MyEventsPage.h" />
+    <ClInclude Include="PersistenceService.h" />
+    <ClInclude Include="SeedData.h" />
+    <ClInclude Include="UserSession.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EventsPage.resx">

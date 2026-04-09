@@ -4,9 +4,14 @@ A Windows Forms application built with C++/CLI (.NET) for managing events.
 
 ## Features
 
-- Create and manage events with details such as name, date, location, and capacity
-- Browse and search through existing events
-- Simple graphical interface with a starting page and events page
+- Browse upcoming events with search and category filtering
+- View full event details (organizer, location, date/time, capacity, description)
+- Register and cancel registration for events
+- Save / unsave events for later
+- "My Events" page with tabs for registered and saved events
+- Create new events as an organizer
+- Persistent storage — event and session data saved to `%APPDATA%\EventApp\`
+- Preloaded sample events across Music, Sports, Tech, Art, Food, and Academic categories
 
 ## Requirements
 
@@ -25,7 +30,13 @@ A Windows Forms application built with C++/CLI (.NET) for managing events.
 |---|---|
 | `GroupProject.sln` | Visual Studio solution file |
 | `GroupProject.vcxproj` | C++/CLI project file |
-| `EventClass.h` | Event data model |
-| `EventManager.h` | Event management logic |
-| `StartingPage.h / .cpp` | Application entry/home screen |
-| `EventsPage.h / .cpp` | Events listing and management screen |
+| `EventClass.h` | Event data model (`EventClass`, `EventCategories`) |
+| `UserSession.h` | Tracks the attendee's registered and saved event IDs |
+| `AppState.h` | Static singletons: `AppState::Manager` and `AppState::Session` |
+| `EventManager.h` | Event management logic (CRUD, search, filter, register, save) |
+| `SeedData.h` | 8 hardcoded sample events loaded on first run |
+| `PersistenceService.h` | Load/save events and session to pipe-delimited text files |
+| `StartingPage.h / .cpp` | Application entry / home screen |
+| `EventsPage.h / .cpp` | Browse events with search, category filter, and card layout |
+| `EventDetailsPage.h` | Full event detail page with Register / Save actions |
+| `MyEventsPage.h` | Attendee page with Registered and Saved Events tabs |

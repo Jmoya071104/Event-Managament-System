@@ -54,3 +54,9 @@ packages/
 # Windows
 Thumbs.db
 Desktop.ini
+
+#agents
+skills-lock.json
+.agents/
+.claude/
+docs/
