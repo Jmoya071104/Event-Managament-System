@@ -193,6 +193,21 @@ private:
         _statLbl->AutoSize  = true;
         statsBar->Controls->Add(_statLbl);
 
+        // ── Demo data notice ───────────────────────────────────────────────────
+        Panel^ demoBar = gcnew Panel();
+        demoBar->Dock      = DockStyle::Top;
+        demoBar->Height    = 36;
+        demoBar->BackColor = Color::FromArgb(255, 243, 205);
+        this->Controls->Add(demoBar);
+
+        Label^ demoLbl    = gcnew Label();
+        demoLbl->Text      = L"Demo Data: Attendee names and emails are generated automatically for demonstration purposes.";
+        demoLbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 9, FontStyle::Italic);
+        demoLbl->ForeColor = Color::FromArgb(133, 100, 4);
+        demoLbl->Location  = Point(12, 10);
+        demoLbl->AutoSize  = true;
+        demoBar->Controls->Add(demoLbl);
+
         // ── Search bar ─────────────────────────────────────────────────────
         Panel^ searchBar = gcnew Panel();
         searchBar->Dock      = DockStyle::Top;
@@ -296,7 +311,9 @@ private:
         if (_filtered->Count == 0)
         {
             Label^ empty    = gcnew Label();
-            empty->Text      = L"No attendees found.";
+            empty->Text      = (_attendees->Count == 0)
+                ? L"No attendees have registered for this event yet."
+                : L"No attendees match your search.";
             empty->Font      = gcnew System::Drawing::Font(L"Segoe UI", 11);
             empty->ForeColor = Color::Gray;
             empty->AutoSize  = true;

@@ -324,6 +324,7 @@ inline void OrganizerDashboardPage::OpenEditorForEvent(int eventId)
 inline void OrganizerDashboardPage::OpenAttendeeManager(int eventId)
 {
     AttendeeManagementPage^ page = gcnew AttendeeManagementPage(eventId, this);
+    page->FormClosed += gcnew FormClosedEventHandler(this, &OrganizerDashboardPage::OnEditorClosed);
     this->Hide();
     page->Show();
 }

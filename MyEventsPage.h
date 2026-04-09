@@ -46,6 +46,7 @@ private:
         this->Name = L"MyEventsPage";
         this->Text = L"My Events";
         this->Load       += gcnew System::EventHandler(this, &MyEventsPage::OnLoad);
+        this->VisibleChanged += gcnew System::EventHandler(this, &MyEventsPage::OnVisibleChanged);
         this->FormClosed += gcnew FormClosedEventHandler(this, &MyEventsPage::OnFormClosed);
         this->ResumeLayout(false);
     }
@@ -61,6 +62,12 @@ private:
     {
         if (_callerForm != nullptr)
             _callerForm->Show();
+    }
+
+    void OnVisibleChanged(System::Object^, System::EventArgs^)
+    {
+        if (!this->Visible || _registeredPanel == nullptr) return;
+        PopulateTabs();
     }
 
     void BuildUI()

@@ -44,6 +44,7 @@ namespace GroupProject {
 			this->Name                = L"EventsPage";
 			this->Text                = L"Browse Events";
 			this->Load               += gcnew System::EventHandler(this, &EventsPage::EventsPage_Load);
+			this->VisibleChanged     += gcnew System::EventHandler(this, &EventsPage::OnVisibleChanged);
 			this->FormClosed         += gcnew FormClosedEventHandler(this, &EventsPage::OnFormClosed);
 			this->ResumeLayout(false);
 		}
@@ -58,6 +59,14 @@ namespace GroupProject {
 		{
 			if (_callerForm != nullptr)
 				_callerForm->Show();
+		}
+
+		void OnVisibleChanged(System::Object^, System::EventArgs^)
+		{
+			if (!this->Visible || _eventsFLP == nullptr) return;
+			String^ query = _searchTB->Text->Trim();
+			String^ cat   = safe_cast<String^>(_categoryCB->SelectedItem);
+			DisplayEvents(AppState::Manager->SearchAndFilter(query, cat));
 		}
 
 		void BuildUI()
