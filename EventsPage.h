@@ -244,7 +244,7 @@ namespace GroupProject {
 
 			// Organizer | Location
 			Label^ metaLbl        = gcnew Label();
-			metaLbl->Text         = ev->Runner + L"  •  " + ev->Location;
+			metaLbl->Text         = ev->Runner + L"  |  " + ev->Location;
 			metaLbl->Font         = gcnew Drawing::Font(L"Segoe UI", 9.0F);
 			metaLbl->ForeColor    = Color::FromArgb(110, 110, 140);
 			metaLbl->Location     = Point(textX, 36);
@@ -255,7 +255,7 @@ namespace GroupProject {
 			// Date range
 			Label^ dateLbl        = gcnew Label();
 			dateLbl->Text         = ev->StartDateTime.ToString(L"MMM dd, yyyy  h:mm tt")
-			                      + L"  →  "
+			                      + L"  -  "
 			                      + ev->EndDateTime.ToString(L"MMM dd, yyyy  h:mm tt");
 			dateLbl->Font         = gcnew Drawing::Font(L"Segoe UI", 9.0F);
 			dateLbl->ForeColor    = Color::FromArgb(110, 110, 140);

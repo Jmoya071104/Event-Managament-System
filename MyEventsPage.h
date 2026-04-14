@@ -85,7 +85,7 @@ private:
         this->Controls->Add(topBar);
 
         Button^ backBtn   = gcnew Button();
-        backBtn->Text      = L"← Back";
+        backBtn->Text      = L"< Back";
         backBtn->Font      = gcnew System::Drawing::Font(L"Segoe UI", 9);
         backBtn->ForeColor = Color::White;
         backBtn->FlatStyle = FlatStyle::Flat;
@@ -212,7 +212,7 @@ private:
         card->Controls->Add(titleLbl);
 
         // Organizer / location / date
-        String^ meta = ev->Runner + L"  •  " + ev->Location + L"\n"
+        String^ meta = ev->Runner + L"  |  " + ev->Location + L"\n"
                      + ev->StartDateTime.ToString(L"MMM dd, yyyy  hh:mm tt");
         Label^ metaLbl = gcnew Label();
         metaLbl->Text     = meta;

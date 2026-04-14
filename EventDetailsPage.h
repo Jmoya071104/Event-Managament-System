@@ -99,7 +99,7 @@ private:
 
         // Back button
         Button^ backBtn   = gcnew Button();
-        backBtn->Text      = L"← Back";
+        backBtn->Text = L"< Back";
         backBtn->Font      = gcnew System::Drawing::Font(L"Segoe UI", 9);
         backBtn->FlatStyle = FlatStyle::Flat;
         backBtn->FlatAppearance->BorderColor = Color::FromArgb(180, 183, 220);

@@ -83,7 +83,7 @@ private:
         this->Controls->Add(topBar);
 
         Button^ backBtn   = gcnew Button();
-        backBtn->Text      = L"\u2190 Back";
+        backBtn->Text      = L"Back";
         backBtn->Location  = Point(10, 14);
         backBtn->Size      = System::Drawing::Size(80, 34);
         backBtn->ForeColor = Color::White;
@@ -262,11 +262,13 @@ private:
         nameLbl->AutoEllipsis = true;
         row->Controls->Add(nameLbl);
 
-        String^ meta = ev->Category + L"  \u2022  "
+        String^ meta = ev->Category 
+            + L" |  "
             + ev->StartDateTime.ToString(L"MMM dd, yyyy  h:mm tt")
-            + L"  \u2022  "
-            + ev->RegisteredCount + L" / "
-            + (ev->Capacity == 0 ? L"∞" : ev->Capacity.ToString()) + L" registered";
+            + L" | "
+            + ev->RegisteredCount 
+            + L" | "
+            + (ev->Capacity == 0 ? L"unlimited" : ev->Capacity.ToString()) + L" registered";
 
         Label^ metaLbl   = gcnew Label();
         metaLbl->Text     = meta;

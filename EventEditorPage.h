@@ -93,7 +93,7 @@ private:
         this->BackColor   = Color::FromArgb(245, 246, 250);
 
         Button^ backBtn    = gcnew Button();
-        backBtn->Text       = L"\u2190 Back";
+        backBtn->Text       = L"< Back";
         backBtn->Location   = Point(10, 14);
         backBtn->Size       = System::Drawing::Size(80, 34);
         backBtn->ForeColor  = Color::White;
