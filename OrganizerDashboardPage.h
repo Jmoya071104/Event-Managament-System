@@ -267,7 +267,7 @@ private:
             + ev->StartDateTime.ToString(L"MMM dd, yyyy  h:mm tt")
             + L" | "
             + ev->RegisteredCount 
-            + L" | "
+            + L" / "
             + (ev->Capacity == 0 ? L"unlimited" : ev->Capacity.ToString()) + L" registered";
 
         Label^ metaLbl   = gcnew Label();
