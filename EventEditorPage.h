@@ -123,7 +123,7 @@ private:
         int cx   = 30;    // column x for labels
         int  vx  = 210;   // column x for inputs
         int  fw  = 500;   // input field width
-        int  y   = 20;
+        int  y   = 80;      //initially 20, set to 80 so that everything would fit on screen
         int  lh  = 30;    // label height
         int  ih  = 32;    // input height
         int  gap = 12;    // gap between rows

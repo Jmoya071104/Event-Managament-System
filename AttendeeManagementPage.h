@@ -158,7 +158,7 @@ private:
         topBar->Controls->Add(backBtn);
 
         Label^ titleLbl   = gcnew Label();
-        titleLbl->Text      = L"Attendees — " + evName;
+        titleLbl->Text      = L"Attendees in " + evName;
         titleLbl->Font      = gcnew System::Drawing::Font(L"Segoe UI", 14, FontStyle::Bold);
         titleLbl->ForeColor = Color::White;
         titleLbl->Location  = Point(100, 0);
@@ -188,7 +188,7 @@ private:
         statsBar->Padding   = System::Windows::Forms::Padding(15, 8, 15, 8);
         this->Controls->Add(statsBar);
 
-        String^ capStr     = (cap >= 0) ? cap.ToString() : L"∞";
+        String^ capStr     = (cap >= 0) ? cap.ToString() : L"unlimited";
         String^ statsText  = L"Registered: " + count + L"   /   Capacity: " + capStr;
         _statLbl           = gcnew Label();
         _statLbl->Text      = statsText;
@@ -385,7 +385,7 @@ private:
         if (ev == nullptr) return;
         int  count  = ev->RegisteredCount;
         int  cap    = ev->Capacity;
-        String^ capStr = (cap > 0) ? cap.ToString() : L"∞";
+        String^ capStr = (cap > 0) ? cap.ToString() : L"unlimited";
         _statLbl->Text = L"Registered: " + count
             + L"   /   Capacity: " + capStr
             + L"   |   Checked In: " + checkedIn + L" / " + count;
